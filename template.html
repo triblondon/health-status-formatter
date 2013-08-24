@@ -1,0 +1,56 @@
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.0/css/bootstrap.min.css'>
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.min.css'>
+<style>
+.alert-status { border-radius: 9px; margin: 1em 0; padding: 12px 30px 7px 30px; font-size: 30px; }
+.alert-status i { margin-right: 15px; margin-top: -5px; font-size: 200%; display: inline-block; vertical-align: middle; }
+.alert-status-sev-1 { background-color: red; color: white; }
+.alert-status-sev-1 .icon-:before { content: "\f057"; }
+.alert-status-sev-2 { background-color: #FF8500; color: white;}
+.alert-status-sev-2 .icon-:before { content: "\f071"; }
+.alert-status-sev-3 { background-color: #FFD273; color: #836C44;}
+.alert-status-sev-3 .icon-:before { content: "\f071"; }
+.alert-status-ok { background-color: green; color: white; }
+.alert-status-ok i:before { content: "\f058"; }
+.panel-heading { position:relative; padding-left: 45px;}
+.panel-heading .status { position: absolute; top:0; left:0; bottom:0; width:35px; text-align: center; font-family: FontAwesome; color: white;font-size: 20px; padding-top: 4px; }
+.panel-heading time { font-style: italic; margin-left: 10px; float: right; }
+.check-ok .status { background-color: green }
+.check-ok .status:before { content: "\f00c"; }
+.check-sev-1 .status { background-color: red }
+.check-sev-1 .status:before { content: "\f00d"; }
+.check-sev-2 .status { background-color: #FF8500 }
+.check-sev-2 .status:before { content: "\f071"; }
+.check-sev-3 .status { background-color: #FFD273; color: #836C44; }
+.check-sev-3 .status:before { content: "\f071"; }
+table.table { margin-bottom: 0; }
+table.table th { white-space: nowrap;}
+</style>
+<div class='container'>
+	<h1>Service health status</h1>
+	<p class='lead'><strong>{{name}}</strong>: {{description}}</p>
+	<div class='alert-status alert-status-{{statusclass}}'><i class='icon-'></i> {{statussummary}}</div>
+
+	<div class='panel-group'>
+
+		{{#checks}}
+		<div class='panel panel-default check check-{{statusclass}}'>
+			<div class="panel-heading">
+				<div class='status'></div>
+				<time datetime='{{{lastUpdated}}}'></time>
+				<h4 class="panel-title">
+					<a data-toggle="collapse" href="#check{{{idx}}}">{{name}}</a>
+				</h4>
+			</div>
+			<div id="check{{{idx}}}" class="panel-collapse collapse">
+				<table class='table'>
+					{{#check}}<tr><th>Check</th><td>{{check}}</td></tr>{{/check}}
+					{{#businessImpact}}<tr><th>Business impact</th><td>{{businessImpact}}</td></tr>{{/businessImpact}}
+					{{#technicalImpact}}<tr><th>Technical impact</th><td>{{technicalImpact}}</td></tr>{{/technicalImpact}}
+					{{#panicGuide}}<tr><th>Panic guide</th><td>{{{panicGuide}}}</td></tr>{{/panicGuide}}
+				</table>
+			</div>
+		</div>
+		{{/checks}}
+
+	</div>
+</div>
