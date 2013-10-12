@@ -7,7 +7,7 @@
 
    "content_scripts": [ {
       "js": [ "mustache.min.js", "content.js" ],
-      "matches": [ "*://*/health", "*://*/healthcheck", "*://*/*/health", "*://*/*/healthcheck" ],
+      "matches": [ "*://*/health", "*://*/healthcheck", "*://*/*/health", "*://*/*/healthcheck", "*://*/*/health?*", "*://*/*/healthcheck?*" ],
       "run_at": "document_end"
    } ],
    "web_accessible_resources": [ "template.html", "format.js" ]
