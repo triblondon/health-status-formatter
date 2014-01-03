@@ -1,0 +1,31 @@
+
+{
+   "schemaVersion": 1,
+   "name": "Tweet service",
+   "description": "Provides an API allowing FT websites to fetch tweets from Twitter in FT style",
+   "checks": [
+      {
+         "name": "Streaming",
+         "check": "Post can be saved and is subsequently streamed by pusher within 3 seconds",
+         "ok": false,
+         "lastUpdated": "2013-08-24T17:30:00Z",
+         "severity": 1,
+         "businessImpact": "Posts saved or updated in [Clamo UI](http://clamoui.ftdata.co.uk) since the problem started will not currently be discoverable by end users and editorial users may perceive that 'things aren't showing up'",
+         "technicalImpact": "Queue lengths may be increasing, which may cause knock-on effects on the amount of free memory (eventually)",
+         "panicGuide": "http://www.example.com/path/to/panic/guide.html"
+      },
+      {
+         "name": "Memcache",
+         "check": "Application can connect to a memcache server",
+         "severity": 2,
+         "ok": false,
+         "lastUpdated": "2013-08-13T09:34:00Z"
+      },
+      {
+         "name": "Beanstalk",
+         "check": "Application can connect to a beanstalk server",
+         "ok": true,
+         "lastUpdated": "2013-08-13T09:34:00Z"
+      }
+   ]
+}

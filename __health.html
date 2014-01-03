@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+	<title>Health check</title>
+
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<style type='text/css'>
+		.alert-status { border-radius: 9px; margin: 1em 0; padding: 12px 30px 7px 30px; font-size: 30px; }
+		.alert-status i { margin-right: 15px; margin-top: -5px; font-size: 200%; display: inline-block; vertical-align: middle; }
+		.alert-status-sev-1 { background-color: red; color: white; }
+		.alert-status-sev-1 .icon-:before { content: "\f057"; }
+		.alert-status-sev-2 { background-color: #FF8500; color: white;}
+		.alert-status-sev-2 .icon-:before { content: "\f071"; }
+		.alert-status-sev-3 { background-color: #FFD273; color: #836C44;}
+		.alert-status-sev-3 .icon-:before { content: "\f071"; }
+		.alert-status-ok { background-color: green; color: white; }
+		.alert-status-ok i:before { content: "\f058"; }
+		.panel-heading { position:relative; padding-left: 45px;}
+		.panel-heading .status { position: absolute; top:0; left:0; bottom:0; width:35px; text-align: center; font-family: FontAwesome; color: white;font-size: 20px; padding-top: 4px; }
+		.panel-heading time { font-style: italic; margin-left: 10px; float: right; }
+		.check-ok .status { background-color: green }
+		.check-ok .status:before { content: "\f00c"; }
+		.check-sev-1 .status { background-color: red }
+		.check-sev-1 .status:before { content: "\f00d"; }
+		.check-sev-2 .status { background-color: #FF8500 }
+		.check-sev-2 .status:before { content: "\f071"; }
+		.check-sev-3 .status { background-color: #FFD273; color: #836C44; }
+		.check-sev-3 .status:before { content: "\f071"; }
+		table.table { margin-bottom: 0; }
+		table.table th { white-space: nowrap; }
+		.template { display: none; }
+		.panel-title { cursor: pointer; }
+	</style>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			var dataurl;
+			dataurl = queryString()['url'] || location.href.replace(/\/[^\/]+$/, '/__health');
+			loadData(dataurl, render);
+			document.body.addEventListener('click', function(e) {
+				var parent = e.target;
+				if (e.target.classList.contains('panel-title')) {
+					while (!parent.classList.contains('panel')) parent = parent.parentNode;
+					parent.querySelector('.panel-collapse').classList.toggle('collapse');
+				}
+			});
+		});
+
+		function render(data) {
+			var template, minsev = 4, el, chk, tblhtml;
+
+			if (!data.schemaVersion || !parseFloat(data.schemaVersion) == 1 || !data.checks || !data.checks.length) {
+				// The data could not be understood
+				return;
+			}
+
+			template = document.querySelector('div.template');
+
+			for (i=0, s=data.checks.length; i<s; i++) {
+				el = template.cloneNode(true);
+				chk = data.checks[i];
+				tblhtml = '';
+				el.classList.remove('template');
+				el.classList.add('check-'+(chk.severity < 4) ? 'sev-'+chk.severity : 'ok');
+				el.querySelector('.lastupdated').setAttribute('datetime', chk.lastUpdated);
+				el.querySelector('.lastupdated').innerHTML = chk.lastUpdated;
+				el.querySelector('.name').innerHTML = chk.name;
+				if (!chk.ok) {
+					if (chk.businessImpact) {
+						tblhtml += '<tr><th>Business impact</th><td>'+chk.businessImpact+'</td></tr>';
+					}
+					if (chk.technicalSummary) {
+						tblhtml += '<tr><th>Technical summary</th><td>'+chk.technicalSummary+'</td></tr>';
+					}
+					if (chk.panicGuide) {
+						tblhtml += '<tr><th>Panic guide</th><td>'+chk.panicGuide+'</td></tr>';
+					}
+					if (chk.checkOutput) {
+						tblhtml += '<tr><th>Output</th><td>'+chk.checkOutput+'</td></tr>';
+					}
+					el.querySelector('table').innerHTML = tblhtml;
+				}
+				document.querySelector('.panel-group').appendChild(el);
+
+				if (!data.checks[i].ok) minsev = Math.min(minsev, data.checks[i].severity);
+			}
+			document.querySelector('.app-name').innerHTML = data.name;
+			document.querySelector('.app-description').innerHTML = data.description;
+			document.querySelector('.alert-status').classList.add('alert-status-' + ((minsev < 4) ? 'sev-'+minsev : 'ok'));
+			document.querySelector('.status-summary').innerHTML = (minsev < 4) ? 'Reporting problems' : 'All checks OK';
+		}
+
+		function loadData(url, cb) {
+			var xhr = new XMLHttpRequest();
+			xhr.onload = function() {
+				cb(JSON.parse(this.responseText));
+			};
+			xhr.open('GET', url);
+			xhr.send();
+		}
+		function queryString() {
+			var result = {}, i, s, keyValuePairs = location.search.slice(1).split('&');
+			for (i=0,s=keyValuePairs.length; i<s; i++) {
+				keyValuePair = keyValuePairs[i].split('=');
+				result[keyValuePair[0]] = keyValuePair[1] || '';
+			};
+			return result;
+		}
+	</script>
+</head>
+<body>
+	<div class='container'>
+		<h1 class='app-name'></h1>
+		<p class='lead app-description'></p>
+		<div class='alert-status'><i class='icon-'></i> <span class='status-summary'></span></div>
+
+		<div class='panel-group'>
+			<div class='panel panel-default check template'>
+				<div class="panel-heading">
+					<div class='status'></div>
+					<time class='lastupdated' datetime=''></time>
+					<h4 class="panel-title name"></h4>
+				</div>
+				<div class="panel-collapse collapse">
+					<table class='table'>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.0/css/bootstrap.min.css'>
+	<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.min.css'>
+</body>
+</html>
