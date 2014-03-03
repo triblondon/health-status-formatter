@@ -3,11 +3,11 @@
 
    "name": "Health status formatter",
    "description": "Format FT web service health status pages",
-   "version": "0.0.1",
+   "version": "0.1.0",
 
    "content_scripts": [ {
       "js": [ "mustache.min.js", "content.js" ],
-      "matches": [ "*://*/health", "*://*/healthcheck", "*://*/*/health", "*://*/*/healthcheck", "*://*/*/health?*", "*://*/*/healthcheck?*" ],
+      "matches": [ "*://*/health", "*://*/__health", "*://*/*/health", "*://*/*/__health", "*://*/*/health?*", "*://*/*/__health?*" ],
       "run_at": "document_end"
    } ],
    "web_accessible_resources": [ "template.html", "format.js" ]
