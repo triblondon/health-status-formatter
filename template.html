@@ -43,9 +43,9 @@ table.table th { white-space: nowrap;}
 			</div>
 			<div id="check{{{idx}}}" class="panel-collapse collapse">
 				<table class='table'>
-					{{#check}}<tr><th>Check</th><td>{{check}}</td></tr>{{/check}}
+					{{#checkOutput}}<tr><th>Output</th><td><tt>{{checkOutput}}</tt></td></tr>{{/check}}
 					{{#businessImpact}}<tr><th>Business impact</th><td>{{businessImpact}}</td></tr>{{/businessImpact}}
-					{{#technicalImpact}}<tr><th>Technical impact</th><td>{{technicalImpact}}</td></tr>{{/technicalImpact}}
+					{{#technicalSummary}}<tr><th>Technical summary</th><td>{{technicalSummary}}</td></tr>{{/technicalSummary}}
 					{{#panicGuide}}<tr><th>Panic guide</th><td>{{{panicGuide}}}</td></tr>{{/panicGuide}}
 				</table>
 			</div>
