@@ -11,17 +11,17 @@
 .alert-status-sev-3 .icon-:before { content: "\f071"; }
 .alert-status-ok { background-color: green; color: white; }
 .alert-status-ok i:before { content: "\f058"; }
-.panel-heading { position:relative; padding-left: 45px;}
-.panel-heading .status { position: absolute; top:0; left:0; bottom:0; width:35px; text-align: center; font-family: FontAwesome; color: white;font-size: 20px; padding-top: 4px; }
+.panel-heading { position:relative; padding-left: 65px;}
+.panel-heading .status { position: absolute; top:0; left:0; bottom:0; width:45px; text-align: center; font-family: FontAwesome; color: white;font-size: 20px; padding-top: 4px; }
 .panel-heading time { font-style: italic; margin-left: 10px; float: right; }
 .check-ok .status { background-color: green }
 .check-ok .status:before { content: "\f00c"; }
 .check-sev-1 .status { background-color: red }
-.check-sev-1 .status:before { content: "\f00d"; }
+.check-sev-1 .status:before { content: "\f00d  1"; }
 .check-sev-2 .status { background-color: #FF8500 }
-.check-sev-2 .status:before { content: "\f071"; }
+.check-sev-2 .status:before { content: "\f071  2"; }
 .check-sev-3 .status { background-color: #FFD273; color: #836C44; }
-.check-sev-3 .status:before { content: "\f071"; }
+.check-sev-3 .status:before { content: "\f071  3"; }
 table.table { margin-bottom: 0; }
 table.table th { white-space: nowrap;}
 </style>
@@ -35,7 +35,8 @@ table.table th { white-space: nowrap;}
 		{{#checks}}
 		<div class='panel panel-default check check-{{statusclass}}'>
 			<div class="panel-heading">
-				<div class='status'></div>
+				<div class='status' title="Severity: {{severity}}">
+				</div>
 				<time datetime='{{{lastUpdated}}}'></time>
 				<h4 class="panel-title">
 					<a data-toggle="collapse" href="#check{{{idx}}}">{{name}}</a>
@@ -44,6 +45,7 @@ table.table th { white-space: nowrap;}
 			<div id="check{{{idx}}}" class="panel-collapse collapse">
 				<table class='table'>
 					{{#checkOutput}}<tr><th>Output</th><td><tt>{{checkOutput}}</tt></td></tr>{{/checkOutput}}
+					{{#severity}}<tr><th>Severity</th><td><tt>{{severity}}</tt></td></tr>{{/severity}}
 					{{#businessImpact}}<tr><th>Business impact</th><td>{{businessImpact}}</td></tr>{{/businessImpact}}
 					{{#technicalSummary}}<tr><th>Technical summary</th><td>{{technicalSummary}}</td></tr>{{/technicalSummary}}
 					{{#panicGuide}}<tr><th>Panic guide</th><td>{{{panicGuide}}}</td></tr>{{/panicGuide}}
