@@ -1,0 +1,117 @@
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.0/css/bootstrap.min.css'>
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.min.css'>
+<style>
+h1 { margin-bottom: 20px; }
+.lead { margin-bottom: 10px; }
+table.table { margin-bottom: 0; }
+table.table th { white-space: nowrap; }
+.keyinfo { font-size: 130%;}
+.systemCode { font-size: 60%; color: #777; background: rgba(0, 0, 0, 0); }
+.panel { margin: 20px 0; }
+.label { display: inline-block; font-size: inherit; }
+time { border-bottom: 1px dotted #bbb; }
+</style>
+<div class='container'>
+
+	<h1>Service information</h1>
+
+	<p class='lead'>
+		<strong>{{name}}</strong>
+		<code class='systemCode'>{{systemCode}}</code>
+	</p>
+
+	{{#purpose}}
+		<p>{{purpose}}</p>
+	{{/purpose}}
+
+	<div class='row keyinfo'>
+		<div class='col-md-2'>Audience</div>
+		<div class='col-md-4'><span class="label label-default">{{audience}}</span></div>
+		<div class='col-md-2'>Service tier</div>
+		<div class='col-md-4'><span class="label label-default">{{serviceTier}}</span></div>
+		<div class='col-md-2'>Created</div>
+		<div class='col-md-4'><time datetime='{{{dateCreated}}}'></time></div>
+		<div class='col-md-2'>URL</div>
+		<div class='col-md-4'><a href='{{primaryUrl}}'>{{primaryUrl}}</a></div>
+	</div>
+
+	{{#appVersion}}
+	<div class='panel-group'>
+		<div class='panel panel-default'>
+			<div class="panel-heading">
+				<h4 class="panel-title">Current version</h4>
+			</div>
+			<div class="panel-body">
+				<p>
+					Running version <code>{{appVersion}}</code>
+					{{#hostname}} on <code>{{hostname}}</code>{{/hostname}}
+					{{#dateDeployed}} deployed <time datetime='{{{dateDeployed}}}'></time>{{/dateDeployed}}
+				</p>
+			</div>
+		</div>
+	</div>
+	{{/appVersion}}
+
+	{{#apisCount}}
+	<div class='panel panel-default'>
+		<div class="panel-heading">
+			<h4 class="panel-title">API endpoints exposed by this service ({{apisCount}})</h4>
+		</div>
+		<table class='table'>
+		{{#apiVersions}}
+			<tr>
+			<td><code>{{path}}</code></td>
+			<td>{{supportStatus}}</td>
+			<td>
+				{{#dateTerminated}}
+					Termination date: <time datetime='{{{dateTerminated}}}'></time>
+				{{/dateTerminated}}
+			</td>
+			</tr>
+		{{/apiVersions}}
+		</table>
+	</div>
+	{{/apisCount}}
+
+	{{#contactsCount}}
+	<div class='panel panel-default'>
+		<div class="panel-heading">
+			<h4 class="panel-title">Contacts ({{contactsCount}})</h4>
+		</div>
+		<table class='table'>
+		{{#contacts}}
+			<tr>
+			<td><span class="label label-default">{{rel}}</span></td>
+			<td>{{name}}</td>
+			<td><a href='mailto:{{email}}'>{{email}}</a></td>
+			<td>{{domain}}</td>
+			</tr>
+		{{/contacts}}
+		</table>
+	</div>
+	{{/contactsCount}}
+
+	{{#linksCount}}
+	<div class='panel panel-default'>
+		<div class="panel-heading">
+			<h4 class="panel-title">Resources ({{linksCount}})</h4>
+		</div>
+		<table class='table'>
+		{{#links}}
+			<tr>
+			<td><span class="label label-default">{{category}}</span></td>
+			<td>
+				{{#description}}
+					<a href='{{url}}'>{{description}}</a>
+				{{/description}}
+				{{^description}}
+					<a href='{{url}}'>{{url}}</a>
+				{{/description}}
+			</td>
+			</tr>
+		{{/links}}
+		</table>
+	</div>
+	{{/linksCount}}
+
+</div>

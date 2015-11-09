@@ -5,8 +5,12 @@
   "version": "0.1.1",
   "content_scripts": [{
     "js": [
-      "mustache.min.js",
-      "content.js"
+      "scripts/content/mustache.min.js",
+      "scripts/content/jquery-2.0.3.min.js",
+      "scripts/content/bootstrap-3.0.0.min.js",
+      "scripts/content/moment-2.1.0.min.js",
+      "scripts/content/showdown-0.3.1.min.js",
+      "scripts/content/content.js"
     ],
     "matches": [
       "*://*/health",
@@ -23,12 +27,13 @@
     "128": "icon_128.png"
   },
   "web_accessible_resources": [
-    "template.html",
+    "templates/health.html",
+    "templates/about.html",
     "format.js"
   ],
   "background": {
     "scripts": [
-      "json_request.js"
+      "scripts/background/json_request.js"
     ]
   },
   "permissions": [
