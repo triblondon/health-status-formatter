@@ -10,6 +10,33 @@ table.table th { white-space: nowrap; }
 .panel { margin: 20px 0; }
 .label { display: inline-block; font-size: inherit; }
 time { border-bottom: 1px dotted #bbb; }
+.kv dl { margin: 0; overflow:hidden; }
+.kv dt { float: left; max-width: 115px; text-overflow: ellipsis; }
+.kv dd { margin-left: 115px; }
+@media (min-width: 770px) {
+	.kv dl { display: inline-block; width: 49%; }
+}
+@media (min-width: 1200px) {
+	.kv { display: flex;}
+	.kv dl { width: auto; flex: 1 0 auto; }
+	.kv dt { float: none; display: inline-block; padding-right: 10px; }
+	.kv dd { margin: 0; display: inline-block; }
+}
+.kv dt, .kv dd {  }
+.label-servicetier-platinum { background-color: #86A2BF; }
+.label-servicetier-gold { background-color: #A25709; }
+.label-servicetier-silver { background-color: #a2a2a2; }
+.label-servicetier-bronze { background-color: #7D5C33; }
+.label-audience-public { background-color: #49A4F3; }
+.label-audience-publicselected { background-color: #1B6CB3; }
+.label-audience-internal { background-color: #68AD8A; }
+.label-category-deployment { background-color: #f00;}
+.label-category-documentation { background-color: #628BAF; }
+.label-category-issues { background-color: #008000; }
+.label-category-monitoring { background-color: #DA6595; }
+.label-category-repo { background-color: #940000; }
+.label-category-testing { background-color: #118282; }
+.label-category-dependency { background-color: #000000; }
 </style>
 <div class='container'>
 
@@ -24,15 +51,11 @@ time { border-bottom: 1px dotted #bbb; }
 		<p>{{purpose}}</p>
 	{{/purpose}}
 
-	<div class='row keyinfo'>
-		<div class='col-md-2'>Audience</div>
-		<div class='col-md-4'><span class="label label-default">{{audience}}</span></div>
-		<div class='col-md-2'>Service tier</div>
-		<div class='col-md-4'><span class="label label-default">{{serviceTier}}</span></div>
-		<div class='col-md-2'>Created</div>
-		<div class='col-md-4'><time datetime='{{{dateCreated}}}'></time></div>
-		<div class='col-md-2'>URL</div>
-		<div class='col-md-4'><a href='{{primaryUrl}}'>{{primaryUrl}}</a></div>
+	<div class='keyinfo kv'>
+		<dl><dt>Audience</dt><dd><span class="label label-audience-{{audienceSlug}}">{{audience}}</span></dd></dl>
+		<dl><dt>Service tier</dt><dd><span class="label label-servicetier-{{serviceTierSlug}}">{{serviceTier}}</span></dd></dl>
+		<dl><dt>Created</dt><dd><time datetime='{{{dateCreated}}}'></time></dd></dl>
+		<dl><dt>URL</dt><dd><a href='{{primaryUrl}}'>{{primaryUrl}}</a></dd></dl>
 	</div>
 
 	{{#appVersion}}
@@ -99,7 +122,7 @@ time { border-bottom: 1px dotted #bbb; }
 		<table class='table'>
 		{{#links}}
 			<tr>
-			<td><span class="label label-default">{{category}}</span></td>
+			<td><span class="label label-category-{{categorySlug}}">{{category}}</span></td>
 			<td>
 				{{#description}}
 					<a href='{{url}}'>{{description}}</a>

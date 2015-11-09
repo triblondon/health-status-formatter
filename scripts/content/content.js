@@ -46,10 +46,16 @@
 	} else if (location.pathname.indexOf('about') !== -1 && schemaVersion == 1) {
 		if (data.links) {
 			data.links.sort(function(a, b) { return a.category > b.category ? 1 : -1; });
+			data.links = data.links.map(function(item) {
+				item.categorySlug = (item.category || "").replace(/\W/, '').toLowerCase();
+				return item;
+			})
 		}
 		data.contactsCount = data.contacts ? data.contacts.length : 0;
 		data.linksCount = data.links ? data.links.length : 0;
 		data.apisCount = data.apiVersions ? data.apiVersions.length : 0;
+		data.serviceTierSlug = (data.serviceTier || "").replace(/\W/, '').toLowerCase();
+		data.audienceSlug = (data.audience || "").replace(/\W/, '').toLowerCase();
 		renderTemplate('about', data);
 	}
 
