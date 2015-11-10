@@ -44,6 +44,11 @@
 		});
 
 	} else if (location.pathname.indexOf('about') !== -1 && schemaVersion == 1) {
+		var knownProps = ['schemaVersion', 'name', 'purpose', 'systemCode', 'audience', 'serviceTier', 'dateCreated', 'dateDeployed', 'appVersion', 'apiVersion', 'apiVersions', 'primaryUrl', 'hostname', 'links', 'contacts'];
+		data.custom = JSON.stringify(Object.keys(data).reduce(function(out, key) {
+			if (knownProps.indexOf(key) === -1) out[key] = data[key];
+			return out;
+		}, {}), undefined, 4);
 		if (data.links) {
 			data.links.sort(function(a, b) { return a.category > b.category ? 1 : -1; });
 			data.links = data.links.map(function(item) {

@@ -62,14 +62,12 @@ time { border-bottom: 1px dotted #bbb; }
 	<div class='panel-group'>
 		<div class='panel panel-default'>
 			<div class="panel-heading">
-				<h4 class="panel-title">Current version</h4>
+				<h4 class="panel-title">Current deployment</h4>
 			</div>
 			<div class="panel-body">
-				<p>
-					Running version <code>{{appVersion}}</code>
-					{{#hostname}} on <code>{{hostname}}</code>{{/hostname}}
-					{{#dateDeployed}} deployed <time datetime='{{{dateDeployed}}}'></time>{{/dateDeployed}}
-				</p>
+				Running <code>{{appVersion}}</code>
+				{{#hostname}} on host <code>{{hostname}}</code>{{/hostname}}
+				{{#dateDeployed}}, last deployed <time datetime='{{{dateDeployed}}}'></time>{{/dateDeployed}}
 			</div>
 		</div>
 	</div>
@@ -136,5 +134,14 @@ time { border-bottom: 1px dotted #bbb; }
 		</table>
 	</div>
 	{{/linksCount}}
+
+	{{#custom}}
+	<div class='panel panel-default'>
+		<div class="panel-heading">
+			<h4 class="panel-title">Additional data</h4>
+		</div>
+		<div class='panel-body'><pre><code>{{custom}}</code></pre></div>
+	</div>
+	{{/custom}}
 
 </div>
