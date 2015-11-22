@@ -6,8 +6,8 @@
 
 	// Don't process if the body content doesn't look like a recognised JSON schema
 	try {
-		if (document.body.childNodes[0] && document.body.childNodes[0].tagName !== "PRE") return;
-		sourceEl = document.body.children.length ? document.body.childNodes[0] : document.body;
+		if (!document.body || (document.body.childNodes[0] && document.body.childNodes[0].tagName !== "PRE")) return;
+		sourceEl = document.body.childNodes[0] || document.body;
 		data = JSON.parse(sourceEl.innerText);
 		if (!data.schemaVersion) return;
 		schemaVersion = parseInt(data.schemaVersion, 10);
@@ -15,8 +15,8 @@
 		return;
 	}
 
-	// Hide the default rendering of the JSON
-	sourceEl.style.display = 'none';
+	// Stop the browser's default rendering of the JSON from appearing
+	document.body.innerHTML = '';
 
 	if (location.pathname.indexOf('health') !== -1 && schemaVersion == 1 && data.checks && Array.isArray(data.checks)) {
 
@@ -44,11 +44,16 @@
 		});
 
 	} else if (location.pathname.indexOf('about') !== -1 && schemaVersion == 1) {
+
 		var knownProps = ['schemaVersion', 'name', 'purpose', 'systemCode', 'audience', 'serviceTier', 'dateCreated', 'dateDeployed', 'appVersion', 'apiVersion', 'apiVersions', 'primaryUrl', 'hostname', 'links', 'contacts'];
 		data.custom = JSON.stringify(Object.keys(data).reduce(function(out, key) {
 			if (knownProps.indexOf(key) === -1) out[key] = data[key];
 			return out;
 		}, {}), undefined, 4);
+		if (data.custom === '{}') {
+			data.custom = undefined;
+		}
+
 		if (data.links) {
 			data.links.sort(function(a, b) { return a.category > b.category ? 1 : -1; });
 			data.links = data.links.map(function(item) {
@@ -56,11 +61,13 @@
 				return item;
 			})
 		}
+
 		data.contactsCount = data.contacts ? data.contacts.length : 0;
 		data.linksCount = data.links ? data.links.length : 0;
 		data.apisCount = data.apiVersions ? data.apiVersions.length : 0;
 		data.serviceTierSlug = (data.serviceTier || "").replace(/\W/, '').toLowerCase();
 		data.audienceSlug = (data.audience || "").replace(/\W/, '').toLowerCase();
+
 		renderTemplate('about', data);
 	}
 
@@ -69,13 +76,16 @@
 		req.open("GET", chrome.extension.getURL('templates/'+name+'.html'), true);
 		req.onreadystatechange = function() {
 			if (req.readyState == 4 && req.status == 200) {
-				document.body.innerHTML = Mustache.to_html(req.responseText, data);
-				document.body.style.display = 'block';
-				$('time').each(function() {
-					var mo = moment($(this).attr('datetime'));
-					$(this).html(mo.fromNow()).attr('title', mo.format("dddd, MMMM Do YYYY, h:mm:ss a"));
-				});
-				return cb ? cb() : true;
+
+				// Brief delay to ensure that if there's a battle between this plugin and JSONView, this one is more likely to be the last one to modify the DOM.  Wish there were a better way to stop JSONView running on our metadata endpoints.
+				setTimeout(function() {
+					document.body.innerHTML = Mustache.to_html(req.responseText, data);
+					$('time').each(function() {
+						var mo = moment($(this).attr('datetime'));
+						$(this).html(mo.fromNow()).attr('title', mo.format("dddd, MMMM Do YYYY, h:mm:ss a"));
+					});
+					if (cb) cb();
+				}, 250);
 			}
 		};
 		req.send(null);
