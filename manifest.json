@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "Health status formatter",
-  "description": "Format FT web service health status pages",
-  "version": "0.1.1",
+  "name": "Healthcheck / About formatter",
+  "description": "Format FT web service health and about endpoints",
+  "version": "1.0.0",
   "content_scripts": [{
     "js": [
       "scripts/content/mustache.min.js",
