@@ -66,7 +66,7 @@ time { border-bottom: 1px dotted #bbb; }
 			</div>
 			<div class="panel-body">
 				Running <code>{{appVersion}}</code>
-				{{#hostname}} on host <code>{{hostname}}</code>{{/hostname}}
+				{{#_hostname}} on host <code>{{_hostname}}</code>{{/_hostname}}
 				{{#dateDeployed}}, last deployed <time datetime='{{{dateDeployed}}}'></time>{{/dateDeployed}}
 			</div>
 		</div>

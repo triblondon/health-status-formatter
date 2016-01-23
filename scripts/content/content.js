@@ -45,7 +45,14 @@
 
 	} else if (location.pathname.indexOf('about') !== -1 && schemaVersion == 1) {
 
-		var knownProps = ['schemaVersion', 'name', 'purpose', 'systemCode', 'audience', 'serviceTier', 'dateCreated', 'dateDeployed', 'appVersion', 'apiVersion', 'apiVersions', 'primaryUrl', 'hostname', 'links', 'contacts'];
+		var knownProps = ['schemaVersion', 'name', 'purpose', 'systemCode', 'audience', 'serviceTier', 'dateCreated', 'dateDeployed', 'appVersion', 'apiVersion', 'apiVersions', 'primaryUrl', '_hostname', 'links', 'contacts'];
+
+		// Backwards compat
+		if (data.hostname && !data._hostname) {
+			data._hostname = data.hostname;
+			delete data.hostname;
+		}
+
 		data.custom = JSON.stringify(Object.keys(data).reduce(function(out, key) {
 			if (knownProps.indexOf(key) === -1) out[key] = data[key];
 			return out;
