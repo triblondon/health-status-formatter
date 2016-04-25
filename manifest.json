@@ -1,23 +1,44 @@
 {
-   "manifest_version": 2,
-   "name": "Health status formatter",
-   "description": "Format FT web service health status pages",
-   "version": "0.1.1",
-   "content_scripts": [ {
-      "js": [ "mustache.min.js", "content.js" ],
-      "matches": [ "*://*/health", "*://*/__health", "*://*/*/health", "*://*/*/__health", "*://*/*/health?*", "*://*/*/__health?*" ],
-      "run_at": "document_end"
-   }],
-   "icons": {
-      "128": "icon_128.png"
-   },
-   "web_accessible_resources": [ "template.html", "format.js" ],
-    "background": {
-    "scripts": ["json_request.js"]
-   },
-   "permissions": [
-          "webRequest",
-	  "webRequestBlocking",
-          "*://*.ft.com/__health"
-        ]
+  "manifest_version": 2,
+  "name": "Healthcheck / About formatter",
+  "description": "Format FT web service health and about endpoints",
+  "version": "1.0.0",
+  "content_scripts": [{
+    "js": [
+      "scripts/content/mustache.min.js",
+      "scripts/content/jquery-2.0.3.min.js",
+      "scripts/content/bootstrap-3.0.0.min.js",
+      "scripts/content/moment-2.1.0.min.js",
+      "scripts/content/showdown-0.3.1.min.js",
+      "scripts/content/content.js"
+    ],
+    "matches": [
+      "*://*/health",
+      "*://*/__health",
+      "*://*/*/health",
+      "*://*/*/__health",
+      "*://*/*/health?*",
+      "*://*/*/__health?*",
+      "*://*/__about"
+    ],
+    "run_at": "document_end"
+  }],
+  "icons": {
+    "128": "icon_128.png"
+  },
+  "web_accessible_resources": [
+    "templates/health.html",
+    "templates/about.html",
+    "format.js"
+  ],
+  "background": {
+    "scripts": [
+      "scripts/background/json_request.js"
+    ]
+  },
+  "permissions": [
+    "webRequest",
+    "webRequestBlocking",
+    "*://*.ft.com/__health"
+  ]
 }
