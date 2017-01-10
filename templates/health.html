@@ -27,7 +27,7 @@ table.table th { white-space: nowrap;}
 </style>
 <div class='container'>
 	<h1>Service health status</h1>
-	<p class='lead'><strong>{{name}}</strong>: {{description}}</p>
+	<p class='lead'><strong>{{name}}{{#systemCode}} (<a href='http://dewey.ft.com/{{systemCode}}.html'>{{systemCode}}</a>){{/systemCode}}</strong>: {{description}}</p>
 	<div class='alert-status alert-status-{{statusclass}}'><i class='icon-'></i> {{statussummary}}</div>
 
 	<div class='panel-group'>
